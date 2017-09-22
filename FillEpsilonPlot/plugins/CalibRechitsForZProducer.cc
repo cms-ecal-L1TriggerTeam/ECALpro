@@ -62,8 +62,8 @@ void CalibRechitsForZProducer::produce(edm::Event& iEvent, const edm::EventSetup
   iEvent.getByToken ( EERecHitCollectionToken_, eeHandle);
   
   // collections to be put in the event
-  std::auto_ptr< EBRecHitCollection > EBNewRecHits( new EBRecHitCollection );
-  std::auto_ptr< EERecHitCollection > EENewRecHits( new EERecHitCollection );
+  std::unique_ptr< EBRecHitCollection > EBNewRecHits( new EBRecHitCollection );
+  std::unique_ptr< EERecHitCollection > EENewRecHits( new EERecHitCollection );
 
   // loop over barrel rechits if wanted
   if(Barrel_orEndcap_=="ONLY_BARREL" || Barrel_orEndcap_=="ALL_PLEASE" ) {
@@ -109,8 +109,8 @@ void CalibRechitsForZProducer::produce(edm::Event& iEvent, const edm::EventSetup
   LogInfo("CalibRechitsForZProducer") << "total # EB rechits before calibration: " << ebHandle->size();
   LogInfo("CalibRechitsForZProducer") << "total # EE rechits before calibration: " << eeHandle->size();
 
-  iEvent.put( EBNewRecHits, EBNewRecHitCollection_ );
-  iEvent.put( EENewRecHits, EENewRecHitCollection_ );
+  iEvent.put( std::move(EBNewRecHits), EBNewRecHitCollection_ );
+  iEvent.put( std::move(EENewRecHits), EENewRecHitCollection_ );
 }
 
 //define this as a plug-in
